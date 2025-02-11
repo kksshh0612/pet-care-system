@@ -1,0 +1,41 @@
+# 기본 설정
+server:
+  address: 0.0.0.0              # 모든 접속 허용
+  port: 8080
+  servlet:
+    session:
+      cookie:
+        same-site: none
+
+spring:
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 5MB          # 요청 파일 하나의 사이즈
+      max-request-size: 200MB     # 요청 전체의 사이즈
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/pet_care?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: kksshh0612
+    password: ${SPRING_DATASOURCE_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
+        format_sql: true                                    # sout으로 보기에 편안한 sql 출력
+        dialect: org.hibernate.dialect.PostgreSQLDialect        # mysql 방언
+    open-in-view: false
+
+logging:
+  level:
+    org.hibernate.SQL: info    # 하이버네이트가 생성하는 sql 로그로 출력
+    org.hibernate.orm.jdbc.bind: off    # 쿼리 파라미터 로그 남김
+
+file-path: 'C:\InteliJ_workspace\pet-system-images'
+
+
