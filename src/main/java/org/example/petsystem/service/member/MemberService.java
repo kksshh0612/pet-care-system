@@ -1,8 +1,11 @@
 package org.example.petsystem.service.member;
 
 import lombok.RequiredArgsConstructor;
+import org.example.petsystem.domain.exception.CustomException;
+import org.example.petsystem.domain.exception.ErrorCode;
 import org.example.petsystem.domain.member.Member;
-import org.example.petsystem.dto.request.SignUpRequest;
+import org.example.petsystem.dto.request.member.EmailDuplicationCheckRequest;
+import org.example.petsystem.dto.request.member.SignUpRequest;
 import org.example.petsystem.repository.member.MemberRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,7 +19,16 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
-    // 이메일 존재 여부 확인 코드 삽입
+    /**
+     * 이메일 중복 검사
+     * @param emailAddress
+     */
+    public void isEmailDuplicated(String emailAddress) {
+
+        if (memberRepository.findByEmailAddress(emailAddress).isPresent()) {
+            throw new CustomException(ErrorCode.EMAIL_ADDRESS_ALREADY_EXIST);
+        }
+    }
 
     /**
      * 회원가입
@@ -25,11 +37,10 @@ public class MemberService {
     @Transactional
     public void signUp(SignUpRequest signUpRequest) {
 
-        if(memberRepository.findByEmailAddress(signUpRequest.getEmailAddress()).isPresent()) {
-            // 예외 throw
-        }
+        isEmailDuplicated(signUpRequest.getEmailAddress());
 
         String encodedPassword = passwordEncoder.encode(signUpRequest.getPassword());
+
         Member member = signUpRequest.toEntity(encodedPassword);
         memberRepository.save(member);
     }
