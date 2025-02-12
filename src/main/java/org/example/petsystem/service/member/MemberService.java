@@ -53,7 +53,7 @@ public class MemberService {
      * 로그인
      * @param loginRequest
      */
-    public void login(LoginRequest loginRequest){
+    public Long login(LoginRequest loginRequest){
 
         Member member = memberRepository.findByEmailAddress(loginRequest.getEmailAddress())
                 .orElseThrow(() -> new CustomException(ErrorCode.EMAIL_PASSWORD_NOT_MATCH));
@@ -61,9 +61,22 @@ public class MemberService {
         if(!passwordEncoder.matches(loginRequest.getPassword(), member.getPassword())) {
             throw new CustomException(ErrorCode.EMAIL_PASSWORD_NOT_MATCH);
         }
+
+        return member.getId();
     }
 
+    /**
+     * 마이페이지 회원 정보 단건 조회
+     * @param memberId
+     * @return
+     */
+    public MypageMemberInfoResponse findMemberInfo(Long memberId){
 
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
+        return MypageMemberInfoResponse.from(member);
+    }
 
     @Transactional
     public void checkPassword(PasswordCheckRequest passwordCheckRequest) {

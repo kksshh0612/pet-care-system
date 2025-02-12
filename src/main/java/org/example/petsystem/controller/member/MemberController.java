@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.petsystem.dto.request.member.EmailDuplicationCheckRequest;
@@ -67,19 +68,21 @@ public class MemberController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = ""),
             @ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json",
-                    examples = {@ExampleObject(name = "필수 입력 정보를 입력하지 않은 경우")}
-            )),
-            @ApiResponse(responseCode = "409", content = @Content(mediaType = "application/json",
-                    examples = {@ExampleObject(name = "회원가입 요청한 이메일과 동일한 이메일이 이미 존재하는 경우")}
+                    examples = {@ExampleObject(name = "필수 입력 정보를 입력하지 않은 경우 OR 아이디/비밀번호가 틀린 경우")}
             ))
     })
+    @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest,
                                    HttpServletRequest request) {
 
-        memberService.login(loginRequest);
+        Long memberId = memberService.login(loginRequest);
 
         // 세션 세팅
+        HttpSession session = request.getSession();
+        session.setAttribute("memberId", memberId);
 
         return ResponseEntity.ok().build();
     }
+
+
 }
