@@ -38,4 +38,9 @@ logging:
 
 file-path: 'C:\InteliJ_workspace\pet-system-images'
 
-
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    display-request-duration: true
