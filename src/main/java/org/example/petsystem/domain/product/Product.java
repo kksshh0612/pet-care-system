@@ -20,16 +20,16 @@ public class Product {
 
     private String name;
 
-    private long totalSaleCount;
+    private long totalSaleQuantity;
 
     private long viewCount;
 
     private ProductCategory productCategory;
 
     @Builder
-    public Product(String name, long totalSaleCount, long viewCount, ProductCategory productCategory) {
+    public Product(String name, long totalSaleQuantity, long viewCount, ProductCategory productCategory) {
         this.name = name;
-        this.totalSaleCount = totalSaleCount;
+        this.totalSaleQuantity = totalSaleQuantity;
         this.viewCount = viewCount;
         this.productCategory = productCategory;
     }

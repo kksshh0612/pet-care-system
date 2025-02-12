@@ -22,7 +22,7 @@ public class OrderProduct {
     @Column(name = "order_product_id")
     private Long id;
 
-    private int productCount;
+    private int quantity;
 
     private int totalPrice;
 
@@ -35,8 +35,8 @@ public class OrderProduct {
     private Order order;
 
     @Builder
-    public OrderProduct(int productCount, int totalPrice, Product product, Order order) {
-        this.productCount = productCount;
+    public OrderProduct(int quantity, int totalPrice, Product product, Order order) {
+        this.quantity = quantity;
         this.totalPrice = totalPrice;
         this.product = product;
         this.order = order;
