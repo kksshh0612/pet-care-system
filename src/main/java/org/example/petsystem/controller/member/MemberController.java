@@ -10,11 +10,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.petsystem.domain.exception.CustomException;
+import org.example.petsystem.domain.exception.ErrorCode;
 import org.example.petsystem.dto.request.member.EmailDuplicationCheckRequest;
 import org.example.petsystem.dto.request.member.LoginRequest;
+import org.example.petsystem.dto.request.member.PasswordChangeRequest;
 import org.example.petsystem.dto.request.member.SignUpRequest;
 import org.example.petsystem.service.member.MemberService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -84,5 +88,31 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
+    // 비밀번호 찾기 구현
 
+    @Operation(summary = "비밀번호 변경", description = "사용자가 비밀번호 변경 요청을 한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = ""),
+            @ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json",
+                    examples = {@ExampleObject(name = "필수 입력 정보를 입력하지 않은 경우 OR 기존 비밀번호가 틀린 경우")}
+            )),
+            @ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json",
+                    examples = {@ExampleObject(name = "세션ID에 해당하는 회원이 없는 경우")}
+            ))
+    })
+    @PatchMapping("/password")
+    public ResponseEntity<?> changePassword(@Valid @RequestBody PasswordChangeRequest passwordChangeRequest,
+                                            HttpServletRequest request) {
+
+        HttpSession session = request.getSession();
+        Long memberId = (Long) session.getAttribute("memberId");
+
+        if(memberId == null) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
+
+        memberService.changePassword(memberId, passwordChangeRequest);
+
+        return ResponseEntity.ok().build();
+    }
 }

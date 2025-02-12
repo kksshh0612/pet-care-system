@@ -43,4 +43,9 @@ public class Member {
         this.memberRole = memberRole;
         this.activeStatus = activeStatus;
     }
+
+    //== 비지니스 로직 ==//
+    public void changePassword(String newPassword) {
+        this.password = newPassword;
+    }
 }

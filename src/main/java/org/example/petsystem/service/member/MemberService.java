@@ -7,6 +7,7 @@ import org.example.petsystem.domain.exception.ErrorCode;
 import org.example.petsystem.domain.member.Member;
 import org.example.petsystem.dto.request.member.EmailDuplicationCheckRequest;
 import org.example.petsystem.dto.request.member.LoginRequest;
+import org.example.petsystem.dto.request.member.PasswordChangeRequest;
 import org.example.petsystem.dto.request.member.PasswordCheckRequest;
 import org.example.petsystem.dto.request.member.SignUpRequest;
 import org.example.petsystem.dto.response.member.MypageMemberInfoResponse;
@@ -66,6 +67,25 @@ public class MemberService {
     }
 
     /**
+     * 비밀번호 변경
+     * @param memberId
+     * @param passwordChangeRequest
+     */
+    @Transactional
+    public void changePassword(Long memberId, PasswordChangeRequest passwordChangeRequest){
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
+        if(!passwordEncoder.matches(passwordChangeRequest.getOldPassword(), member.getPassword())){
+            throw new CustomException(ErrorCode.PASSWORD_NOT_MATCH);
+        }
+
+        String newPassword = passwordEncoder.encode(passwordChangeRequest.getNewPassword());
+        member.changePassword(newPassword);
+    }
+
+    /**
      * 마이페이지 회원 정보 단건 조회
      * @param memberId
      * @return
@@ -78,9 +98,4 @@ public class MemberService {
         return MypageMemberInfoResponse.from(member);
     }
 
-    @Transactional
-    public void checkPassword(PasswordCheckRequest passwordCheckRequest) {
-
-
-    }
 }
