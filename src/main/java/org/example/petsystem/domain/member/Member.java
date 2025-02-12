@@ -2,6 +2,8 @@ package org.example.petsystem.domain.member;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,6 +28,7 @@ public class Member {
 
     private String phoneNumber;
 
+    @Enumerated(EnumType.STRING)
     private MemberRole memberRole;
 
     private boolean activeStatus;
