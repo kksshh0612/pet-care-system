@@ -3,6 +3,7 @@ package org.example.petsystem.controller.member;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -16,8 +17,10 @@ import org.example.petsystem.dto.request.member.EmailDuplicationCheckRequest;
 import org.example.petsystem.dto.request.member.LoginRequest;
 import org.example.petsystem.dto.request.member.PasswordChangeRequest;
 import org.example.petsystem.dto.request.member.SignUpRequest;
+import org.example.petsystem.dto.response.member.MypageMemberInfoResponse;
 import org.example.petsystem.service.member.MemberService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -114,5 +117,25 @@ public class MemberController {
         memberService.changePassword(memberId, passwordChangeRequest);
 
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "마이페이지 회원 정보 조회", description = "사용자가 마이페이지 회원 정보를 조회한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", content = @Content(schema = @Schema(implementation = MypageMemberInfoResponse.class))),
+            @ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json",
+                    examples = {@ExampleObject(name = "세션ID에 해당하는 회원이 없는 경우")}
+            ))
+    })
+    @GetMapping("")
+    public ResponseEntity<?> findMemberInfo(HttpServletRequest request) {
+
+        HttpSession session = request.getSession();
+        Long memberId = (Long) session.getAttribute("memberId");
+
+        if(memberId == null) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
+
+        return ResponseEntity.ok(memberService.findMemberInfo(memberId));
     }
 }
