@@ -91,6 +91,22 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "로그아웃", description = "사용자가 로그아웃 요청을 한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "")
+    })
+    @PostMapping("/logout")
+    public ResponseEntity<?> findPassword(HttpServletRequest request) {
+
+        HttpSession session = request.getSession();
+
+        if (session.getAttribute("memberId") == null) {
+            session.invalidate();
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
     // 비밀번호 찾기 구현
 
     @Operation(summary = "비밀번호 변경", description = "사용자가 비밀번호 변경 요청을 한다.")
