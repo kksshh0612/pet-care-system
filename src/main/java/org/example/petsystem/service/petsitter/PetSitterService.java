@@ -11,6 +11,7 @@ import org.example.petsystem.domain.file.CertificationFile;
 import org.example.petsystem.domain.member.Member;
 import org.example.petsystem.domain.pet.Pet;
 import org.example.petsystem.domain.petsitter.PetSitter;
+import org.example.petsystem.dto.request.petsitter.PetSitterProfileModofyRequest;
 import org.example.petsystem.dto.request.petsitter.PetSitterRegisterRequest;
 import org.example.petsystem.dto.response.PetSitterProfileResponse;
 import org.example.petsystem.repository.certification.CertificationRepository;
@@ -48,7 +49,7 @@ public class PetSitterService {
     }
 
     /**
-     * 회원 펫시터 정보 조회
+     * 회원 펫시터 프로필 조회
      * @param memberId
      * @return
      */
@@ -66,5 +67,22 @@ public class PetSitterService {
             return PetSitterProfileResponse.of(petSitter, certificationFiles);
 
         }).orElse(null);
+    }
+
+    /**
+     * 회원 펫시터 프로필 수정
+     * @param memberId
+     * @param modofyRequest
+     */
+    public void modifyPetSitterProfile(Long memberId, PetSitterProfileModofyRequest modofyRequest){
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
+        PetSitter petSitter = petSitterRepository.findById(modofyRequest.getId())
+                .orElseThrow(() -> new CustomException(ErrorCode.PET_SITTER_NOT_FOUND));
+
+        petSitter.modify(modofyRequest.getLocation(), modofyRequest.getAvailableDaysOfWeek(),
+                modofyRequest.getPetCodes(), modofyRequest.getFee(), modofyRequest.getIntroduction());
     }
 }

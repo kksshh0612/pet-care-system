@@ -59,4 +59,13 @@ public class PetSitter {
         this.averageRating = averageRating;
         this.totalServiceCount = totalServiceCount;
     }
+
+    //== 비지니스 로직 ==//
+    public void modify(String location, List<DayOfWeek> availableDays, List<PetCode> petCodes, int fee, String introduction){
+        this.location = location;
+        this.availableDays = availableDays;
+        this.petCodes = petCodes;
+        this.fee = fee;
+        this.introduction = introduction;
+    }
 }

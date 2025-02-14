@@ -12,10 +12,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import org.example.petsystem.domain.exception.CustomException;
 import org.example.petsystem.domain.exception.ErrorCode;
+import org.example.petsystem.dto.request.petsitter.PetSitterProfileModofyRequest;
 import org.example.petsystem.dto.request.petsitter.PetSitterRegisterRequest;
 import org.example.petsystem.service.petsitter.PetSitterService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,7 +71,7 @@ public class PetSitterController {
             ))
     })
     @GetMapping("")
-    public ResponseEntity<?> findPetSitterInfo(HttpSession session){
+    public ResponseEntity<?> findPetSitterProfile(HttpSession session){
 
         Long memberId = (Long) session.getAttribute("memberId");
 
@@ -78,5 +80,30 @@ public class PetSitterController {
         }
 
         return ResponseEntity.ok(petSitterService.findPetSitterProfile(memberId));
+    }
+
+    @Operation(summary = "펫시터 프로필 수정", description = "사용자가 펫시터 프로필을 수정한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(responseCode = "401", content = @Content(mediaType = "application/json",
+                    examples = {@ExampleObject(name = "로그인하지 않은 사용자가 프로필을 등록하는 경우")}
+            )),
+            @ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json",
+                    examples = {@ExampleObject(name = "memberId에 해당하는 회원을 찾을 수 없는 경우")}
+            ))
+    })
+    @PatchMapping("")
+    public ResponseEntity<?> modifyPetSitterProfile(@Valid @RequestBody PetSitterProfileModofyRequest modofyRequest,
+                                                    HttpSession session){
+
+        Long memberId = (Long) session.getAttribute("memberId");
+
+        if(memberId == null){
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
+
+        petSitterService.modifyPetSitterProfile(memberId, modofyRequest);
+
+        return ResponseEntity.ok().build();
     }
 }
