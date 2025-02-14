@@ -15,6 +15,7 @@ import org.example.petsystem.domain.exception.ErrorCode;
 import org.example.petsystem.dto.request.petsitter.PetSitterRegisterRequest;
 import org.example.petsystem.service.petsitter.PetSitterService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,5 +56,27 @@ public class PetSitterController {
 
         petSitterService.register(memberId, petSitterRegisterRequest);
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "펫시터 프로필 조회", description = "사용자가 펫시터 프로필을 조회한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(responseCode = "401", content = @Content(mediaType = "application/json",
+                    examples = {@ExampleObject(name = "로그인하지 않은 사용자가 프로필을 등록하는 경우")}
+            )),
+            @ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json",
+                    examples = {@ExampleObject(name = "memberId에 해당하는 회원을 찾을 수 없는 경우")}
+            ))
+    })
+    @GetMapping("")
+    public ResponseEntity<?> findPetSitterInfo(HttpSession session){
+
+        Long memberId = (Long) session.getAttribute("memberId");
+
+        if(memberId == null){
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
+
+        return ResponseEntity.ok(petSitterService.findPetSitterProfile(memberId));
     }
 }
