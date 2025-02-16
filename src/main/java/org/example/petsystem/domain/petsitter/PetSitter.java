@@ -1,5 +1,6 @@
 package org.example.petsystem.domain.petsitter;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -8,12 +9,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.petsystem.domain.certification.Certification;
 import org.example.petsystem.domain.member.Member;
 import org.example.petsystem.domain.pet.PetCode;
 import org.example.petsystem.domain.week.DayOfWeek;
@@ -47,9 +50,13 @@ public class PetSitter {
 
     private int totalServiceCount;
 
+    @OneToMany(mappedBy = "petSitter", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<Certification> certifications = new ArrayList<>();
+
     @Builder
     public PetSitter(Member member, String location, List<DayOfWeek> availableDays, List<PetCode> petCodes, int fee,
-                     String introduction, float averageRating, int totalServiceCount) {
+                     String introduction, float averageRating, int totalServiceCount,
+                     List<Certification> certifications) {
         this.member = member;
         this.location = location;
         this.availableDays = availableDays;
@@ -58,6 +65,12 @@ public class PetSitter {
         this.introduction = introduction;
         this.averageRating = averageRating;
         this.totalServiceCount = totalServiceCount;
+        this.certifications = certifications;
+    }
+
+    //== 연관관계 편의 매서드 ==//
+    public void addCertification(Certification certification) {
+        this.certifications.add(certification);
     }
 
     //== 비지니스 로직 ==//

@@ -1,25 +1,16 @@
-package org.example.petsystem.dto.response;
+package org.example.petsystem.dto.response.petsitter;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.petsystem.domain.certification.Certification;
 import org.example.petsystem.domain.file.CertificationFile;
-import org.example.petsystem.domain.member.Member;
 import org.example.petsystem.domain.pet.PetCode;
 import org.example.petsystem.domain.petsitter.PetSitter;
 import org.example.petsystem.domain.week.DayOfWeek;
+import org.example.petsystem.dto.response.file.FileInfoDto;
 
 @Getter
 @NoArgsConstructor
@@ -35,10 +26,9 @@ public class PetSitterProfileResponse {
     private String introduction;
     private float averageRating;
     private int totalServiceCount;
-    private List<String> certificationUrls;
+    private List<String> certificationNames;
 
-    public static PetSitterProfileResponse of(PetSitter petSitter, List<CertificationFile> files) {
-
+    public static PetSitterProfileResponse of(PetSitter petSitter, List<Certification> certifications) {
         return PetSitterProfileResponse.builder()
                 .id(petSitter.getId())
                 .location(petSitter.getLocation())
@@ -48,7 +38,7 @@ public class PetSitterProfileResponse {
                 .introduction(petSitter.getIntroduction())
                 .averageRating(petSitter.getAverageRating())
                 .totalServiceCount(petSitter.getTotalServiceCount())
-                .certificationUrls(files.stream().map(CertificationFile::getUrl).toList())
+                .certificationNames(certifications.stream().map(Certification::getName).toList())
                 .build();
     }
 }

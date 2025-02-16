@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.petsystem.domain.file.CertificationFile;
@@ -32,5 +33,9 @@ public class Certification {
     @JoinColumn(name = "pet_sitter_id")
     private PetSitter petSitter;
 
-
+    @Builder
+    public Certification(String name, PetSitter petSitter) {
+        this.name = name;
+        this.petSitter = petSitter;
+    }
 }
