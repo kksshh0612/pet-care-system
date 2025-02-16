@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.petsystem.domain.file.CertificationFile;
 import org.example.petsystem.domain.member.Member;
+import org.example.petsystem.domain.petsitter.PetSitter;
 
 @Entity
 @Getter
@@ -28,10 +29,8 @@ public class Certification {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "pet_sitter_id")
+    private PetSitter petSitter;
 
-    @OneToOne(mappedBy = "certification", cascade = CascadeType.ALL, orphanRemoval = true)
-    private CertificationFile certificationFile;
 
 }
