@@ -15,12 +15,14 @@ import org.example.petsystem.global.exception.CustomException;
 import org.example.petsystem.global.exception.ErrorCode;
 import org.example.petsystem.member.dto.request.EmailDuplicationCheckRequest;
 import org.example.petsystem.member.dto.request.LoginRequest;
+import org.example.petsystem.member.dto.request.ModifyMemberInfoRequest;
 import org.example.petsystem.member.dto.request.PasswordChangeRequest;
 import org.example.petsystem.member.dto.request.SignUpRequest;
 import org.example.petsystem.member.dto.response.LoginSuccessDto;
 import org.example.petsystem.member.dto.response.MypageMemberInfoResponse;
 import org.example.petsystem.member.service.MemberService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -103,14 +105,12 @@ public class MemberController {
 
         HttpSession session = request.getSession();
 
-        if (session.getAttribute("memberId") == null) {
+        if (session.getAttribute("memberId") != null) {
             session.invalidate();
         }
 
         return ResponseEntity.ok().build();
     }
-
-    // 비밀번호 찾기 구현
 
     @Operation(summary = "비밀번호 변경", description = "사용자가 비밀번호 변경 요청을 한다.")
     @ApiResponses({
@@ -155,5 +155,28 @@ public class MemberController {
         }
 
         return ResponseEntity.ok(memberService.findMemberInfo(memberId));
+    }
+
+    @Operation(summary = "회원정보 변경", description = "사용자가 회원정보 변경 요청을 한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = ""),
+            @ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json",
+                    examples = {@ExampleObject(name = "필수 입력 정보를 입력하지 않은 경우")}
+            )),
+            @ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json",
+                    examples = {@ExampleObject(name = "세션ID에 해당하는 회원이 없는 경우")}
+            ))
+    })
+    @PatchMapping("/member-info")
+    public ResponseEntity<?> modifyMemberInfo(@Valid @RequestBody ModifyMemberInfoRequest modifyMemberInfoRequest,
+                                              @SessionAttribute("memberId") Long memberId){
+
+        if(memberId == null) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
+
+        memberService.modifyMemberInfo(modifyMemberInfoRequest, memberId);
+
+        return ResponseEntity.ok().build();
     }
 }

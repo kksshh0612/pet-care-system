@@ -19,6 +19,7 @@ import lombok.NoArgsConstructor;
 import org.example.petsystem.certification.domain.Certification;
 import org.example.petsystem.member.domain.Member;
 import org.example.petsystem.global.auditing.BaseEntity;
+import org.example.petsystem.pet.domain.PetCode;
 
 @Entity
 @Getter
@@ -38,8 +39,8 @@ public class PetSitter extends BaseEntity {
     @ElementCollection(fetch = FetchType.LAZY)
     private List<DayOfWeek> availableDays;
 
-//    @ElementCollection(fetch = FetchType.LAZY)
-//    private List<PetCode> petCodes = new ArrayList<>();
+    @ElementCollection(fetch = FetchType.LAZY)
+    private List<PetCode> petCodes = new ArrayList<>();
 
     private int fee;
 
@@ -52,18 +53,22 @@ public class PetSitter extends BaseEntity {
     @OneToMany(mappedBy = "petSitter", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Certification> certifications = new ArrayList<>();
 
+    private boolean isApproved;
+
     @Builder
     public PetSitter(Member member, String location, List<DayOfWeek> availableDays, int fee,
                      String introduction, float averageRating, int totalServiceCount,
-                     List<Certification> certifications) {
+                     List<PetCode> petCodes, List<Certification> certifications, boolean isApproved) {
         this.member = member;
         this.location = location;
         this.availableDays = availableDays;
+        this.petCodes = petCodes;
         this.fee = fee;
         this.introduction = introduction;
         this.averageRating = averageRating;
         this.totalServiceCount = totalServiceCount;
         this.certifications = certifications;
+        this.isApproved = isApproved;
     }
 
     //== 연관관계 편의 매서드 ==//
@@ -77,5 +82,9 @@ public class PetSitter extends BaseEntity {
         this.availableDays = availableDays;
         this.fee = fee;
         this.introduction = introduction;
+    }
+
+    public void approve(){
+        this.isApproved = true;
     }
 }

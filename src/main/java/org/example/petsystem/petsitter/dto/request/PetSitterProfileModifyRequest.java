@@ -9,7 +9,7 @@ import org.example.petsystem.petsitter.domain.DayOfWeek;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PetSitterProfileModofyRequest {
+public class PetSitterProfileModifyRequest {
 
     private Long id;
     private String location;

@@ -1,4 +1,4 @@
-package org.example.petsystem.domain.pet;
+package org.example.petsystem.pet.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

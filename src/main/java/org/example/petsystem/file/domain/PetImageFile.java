@@ -7,7 +7,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.petsystem.domain.pet.Pet;
+import org.example.petsystem.pet.domain.Pet;
 
 @Entity
 @Getter

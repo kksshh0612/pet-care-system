@@ -6,9 +6,10 @@ import lombok.RequiredArgsConstructor;
 import org.example.petsystem.global.exception.CustomException;
 import org.example.petsystem.global.exception.ErrorCode;
 import org.example.petsystem.member.domain.Member;
+import org.example.petsystem.pet.domain.Pet;
 import org.example.petsystem.petsitter.domain.PetSitter;
 import org.example.petsystem.petsitter.domain.SortType;
-import org.example.petsystem.petsitter.dto.request.PetSitterProfileModofyRequest;
+import org.example.petsystem.petsitter.dto.request.PetSitterProfileModifyRequest;
 import org.example.petsystem.petsitter.dto.request.PetSitterRegisterRequest;
 import org.example.petsystem.petsitter.dto.response.PetSitterProfileListResponse;
 import org.example.petsystem.petsitter.dto.response.PetSitterProfileResponse;
@@ -61,20 +62,40 @@ public class PetSitterService {
     }
 
     /**
-     * 회원 펫시터 프로필 수정
+     * 마이페이지 회원 펫시터 프로필 단건 조회
      * @param memberId
-     * @param modofyRequest
+     * @return
      */
-    public void modifyPetSitterProfile(Long memberId, PetSitterProfileModofyRequest modofyRequest){
+    public PetSitterProfileResponse findMyPetSitterProfile(Long memberId){
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
-        PetSitter petSitter = petSitterRepository.findById(modofyRequest.getId())
+        PetSitter petSitter = petSitterRepository.findByMember(member)
                 .orElseThrow(() -> new CustomException(ErrorCode.PET_SITTER_NOT_FOUND));
 
-        petSitter.modify(modofyRequest.getLocation(), modofyRequest.getAvailableDaysOfWeek(),
-                modofyRequest.getFee(), modofyRequest.getIntroduction());
+        return  PetSitterProfileResponse.of(petSitter, petSitter.getCertifications());
+    }
+
+    /**
+     * 회원 펫시터 프로필 수정
+     * @param memberId
+     * @param modifyRequest
+     */
+    public void modifyPetSitterProfile(Long memberId, PetSitterProfileModifyRequest modifyRequest){
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
+        System.out.println(modifyRequest.getId());
+        System.out.println(modifyRequest.getFee());
+        System.out.println(modifyRequest.getIntroduction());
+
+        PetSitter petSitter = petSitterRepository.findById(modifyRequest.getId())
+                .orElseThrow(() -> new CustomException(ErrorCode.PET_SITTER_NOT_FOUND));
+
+        petSitter.modify(modifyRequest.getLocation(), modifyRequest.getAvailableDaysOfWeek(),
+                modifyRequest.getFee(), modifyRequest.getIntroduction());
     }
 
     /**
@@ -84,7 +105,40 @@ public class PetSitterService {
      * @param sortType
      * @return
      */
-    public PetSitterProfileListResponse findPetSitterProfileList(int page, int size, SortType sortType){
+    public PetSitterProfileListResponse findPetSitterProfileListForManager(int page, int size){
+
+//        PageRequest pageRequest;
+//
+//        switch (sortType){
+//            case RATING_DESC -> pageRequest = PageRequest.of(page, size, Sort.by(Direction.DESC, "averageRating"));
+//            case RATING_ASC -> pageRequest = PageRequest.of(page, size, Sort.by(Direction.ASC, "averageRating"));
+//            case FEE_DESC -> pageRequest = PageRequest.of(page, size, Sort.by(Direction.DESC, "fee"));
+//            case FEE_ASC -> pageRequest = PageRequest.of(page, size, Sort.by(Direction.ASC, "fee"));
+//            case TOTAL_SERVICE_COUNT_DESC -> pageRequest = PageRequest.of(page, size, Sort.by(Direction.DESC, "totalServiceCount"));
+//            case TOTAL_SERVICE_COUNT_ASC -> pageRequest = PageRequest.of(page, size, Sort.by(Direction.ASC, "totalServiceCount"));
+//            default -> pageRequest = PageRequest.of(page, size, Sort.by(Direction.DESC, "id"));
+//        }
+
+        PageRequest pageRequest = PageRequest.of(page, size);
+
+        List<PetSitter> petSitters = petSitterRepository.findAll(pageRequest).getContent();
+
+        return PetSitterProfileListResponse.of(
+                petSitters.stream()
+                        .map(petSitter -> PetSitterProfileResponse.of(petSitter, petSitter.getCertifications()))
+                        .collect(Collectors.toList())
+        );
+
+    }
+
+    /**
+     * 펫시터 프로필 목록 조회
+     * @param page
+     * @param size
+     * @param sortType
+     * @return
+     */
+    public PetSitterProfileListResponse findPetSitterProfileListForGeneral(int page, int size, SortType sortType){
 
         PageRequest pageRequest;
 
@@ -98,7 +152,7 @@ public class PetSitterService {
             default -> pageRequest = PageRequest.of(page, size, Sort.by(Direction.DESC, "id"));
         }
 
-        List<PetSitter> petSitters = petSitterRepository.findAll(pageRequest).getContent();
+        List<PetSitter> petSitters = petSitterRepository.findAllApprovedPetSitters(pageRequest).getContent();
 
         return PetSitterProfileListResponse.of(
                 petSitters.stream()
@@ -106,5 +160,14 @@ public class PetSitterService {
                         .collect(Collectors.toList())
         );
 
+    }
+
+    @Transactional
+    public void approvePetSitter(Long petSitterId){
+
+        PetSitter petSitter = petSitterRepository.findById(petSitterId)
+                .orElseThrow(() -> new CustomException(ErrorCode.PET_SITTER_NOT_FOUND));
+
+        petSitter.approve();
     }
 }

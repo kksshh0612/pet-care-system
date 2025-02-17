@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.petsystem.member.domain.Member;
+import org.example.petsystem.pet.domain.PetCode;
 import org.example.petsystem.petsitter.domain.PetSitter;
 import org.example.petsystem.petsitter.domain.DayOfWeek;
 
@@ -15,7 +16,7 @@ public class PetSitterRegisterRequest {
 
     private String location;
     private List<DayOfWeek> availableDaysOfWeek;
-//    private List<PetCode> petCodes;
+    private List<PetCode> petCodes;
     private int fee;
     private String introduction;
 
@@ -24,11 +25,12 @@ public class PetSitterRegisterRequest {
                 .member(member)
                 .location(this.location)
                 .availableDays(this.availableDaysOfWeek)
-//                .petCodes(this.petCodes)
+                .petCodes(this.petCodes)
                 .fee(this.fee)
                 .introduction(this.introduction)
                 .averageRating(0)
                 .totalServiceCount(0)
+                .isApproved(false)
                 .build();
     }
 

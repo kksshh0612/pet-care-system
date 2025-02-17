@@ -64,9 +64,9 @@ public class CodeController {
     }
 
     // 코드 상세 목록 조회
-    @GetMapping("/detail")
+    @GetMapping("/detail/{code-group-id}")
     public ResponseEntity<?> getCodeDetailList(@RequestParam("page") int page, @RequestParam("size") int size,
-                                               @RequestParam("code-group-id") Long codeGroupId){
+                                               @PathVariable("code-group-id") Long codeGroupId){
 
         return ResponseEntity.ok(codeService.findCodeDetailList(codeGroupId, page, size));
     }

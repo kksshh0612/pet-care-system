@@ -5,6 +5,7 @@ import org.example.petsystem.global.exception.CustomException;
 import org.example.petsystem.global.exception.ErrorCode;
 import org.example.petsystem.member.domain.Member;
 import org.example.petsystem.member.dto.request.LoginRequest;
+import org.example.petsystem.member.dto.request.ModifyMemberInfoRequest;
 import org.example.petsystem.member.dto.request.PasswordChangeRequest;
 import org.example.petsystem.member.dto.request.SignUpRequest;
 import org.example.petsystem.member.dto.response.LoginSuccessDto;
@@ -94,6 +95,17 @@ public class MemberService {
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
         return MypageMemberInfoResponse.from(member);
+    }
+
+    @Transactional
+    public void modifyMemberInfo(ModifyMemberInfoRequest modifyMemberInfoRequest, Long memberId){
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
+        member.modify(modifyMemberInfoRequest.getEmailAddress(), modifyMemberInfoRequest.getName(),
+                modifyMemberInfoRequest.getPhoneNumber());
+
     }
 
 }
