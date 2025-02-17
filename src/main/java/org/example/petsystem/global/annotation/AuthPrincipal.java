@@ -1,7 +1,7 @@
 package org.example.petsystem.global.annotation;
 
-import static org.example.petsystem.domain.member.MemberRole.ROLE_ADMIN;
-import static org.example.petsystem.domain.member.MemberRole.ROLE_USER;
+import static org.example.petsystem.member.domain.MemberRole.ROLE_ADMIN;
+import static org.example.petsystem.member.domain.MemberRole.ROLE_USER;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
