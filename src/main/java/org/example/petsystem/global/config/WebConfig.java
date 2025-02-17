@@ -1,5 +1,6 @@
-package org.example.petsystem.config;
+package org.example.petsystem.global.config;
 
+import org.example.petsystem.global.interceptor.AuthInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -8,6 +9,7 @@ import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -33,5 +35,11 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedHeaders("*");
 
         WebMvcConfigurer.super.addCorsMappings(registry);
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+
+        registry.addInterceptor(new AuthInterceptor());
     }
 }
