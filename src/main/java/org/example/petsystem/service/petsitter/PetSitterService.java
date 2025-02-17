@@ -80,7 +80,7 @@ public class PetSitterService {
                 .orElseThrow(() -> new CustomException(ErrorCode.PET_SITTER_NOT_FOUND));
 
         petSitter.modify(modofyRequest.getLocation(), modofyRequest.getAvailableDaysOfWeek(),
-                modofyRequest.getPetCodes(), modofyRequest.getFee(), modofyRequest.getIntroduction());
+                modofyRequest.getFee(), modofyRequest.getIntroduction());
     }
 
     /**

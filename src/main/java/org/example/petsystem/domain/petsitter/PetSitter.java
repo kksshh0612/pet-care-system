@@ -18,7 +18,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.petsystem.domain.certification.Certification;
 import org.example.petsystem.domain.member.Member;
-import org.example.petsystem.domain.pet.PetCode;
 import org.example.petsystem.domain.week.DayOfWeek;
 import org.example.petsystem.global.auditing.BaseEntity;
 
@@ -40,8 +39,8 @@ public class PetSitter extends BaseEntity {
     @ElementCollection(fetch = FetchType.LAZY)
     private List<DayOfWeek> availableDays;
 
-    @ElementCollection(fetch = FetchType.LAZY)
-    private List<PetCode> petCodes = new ArrayList<>();
+//    @ElementCollection(fetch = FetchType.LAZY)
+//    private List<PetCode> petCodes = new ArrayList<>();
 
     private int fee;
 
@@ -55,13 +54,12 @@ public class PetSitter extends BaseEntity {
     List<Certification> certifications = new ArrayList<>();
 
     @Builder
-    public PetSitter(Member member, String location, List<DayOfWeek> availableDays, List<PetCode> petCodes, int fee,
+    public PetSitter(Member member, String location, List<DayOfWeek> availableDays, int fee,
                      String introduction, float averageRating, int totalServiceCount,
                      List<Certification> certifications) {
         this.member = member;
         this.location = location;
         this.availableDays = availableDays;
-        this.petCodes = petCodes;
         this.fee = fee;
         this.introduction = introduction;
         this.averageRating = averageRating;
@@ -75,10 +73,9 @@ public class PetSitter extends BaseEntity {
     }
 
     //== 비지니스 로직 ==//
-    public void modify(String location, List<DayOfWeek> availableDays, List<PetCode> petCodes, int fee, String introduction){
+    public void modify(String location, List<DayOfWeek> availableDays, int fee, String introduction){
         this.location = location;
         this.availableDays = availableDays;
-        this.petCodes = petCodes;
         this.fee = fee;
         this.introduction = introduction;
     }

@@ -6,11 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.petsystem.domain.certification.Certification;
-import org.example.petsystem.domain.file.CertificationFile;
-import org.example.petsystem.domain.pet.PetCode;
 import org.example.petsystem.domain.petsitter.PetSitter;
 import org.example.petsystem.domain.week.DayOfWeek;
-import org.example.petsystem.dto.response.file.FileInfoDto;
 
 @Getter
 @NoArgsConstructor
@@ -21,7 +18,7 @@ public class PetSitterProfileResponse {
     private Long id;
     private String location;
     private List<String> availableDays;
-    private List<String> petTypes;
+//    private List<String> petTypes;
     private int fee;
     private String introduction;
     private float averageRating;
@@ -33,7 +30,7 @@ public class PetSitterProfileResponse {
                 .id(petSitter.getId())
                 .location(petSitter.getLocation())
                 .availableDays(petSitter.getAvailableDays().stream().map(DayOfWeek::getName).toList())
-                .petTypes(petSitter.getPetCodes().stream().map(PetCode::getName).toList())
+//                .petTypes(petSitter.getPetCodes().stream().map(PetCode::getName).toList())
                 .fee(petSitter.getFee())
                 .introduction(petSitter.getIntroduction())
                 .averageRating(petSitter.getAverageRating())
