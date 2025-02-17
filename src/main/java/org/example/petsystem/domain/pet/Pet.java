@@ -12,11 +12,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.petsystem.domain.member.Member;
+import org.example.petsystem.global.auditing.BaseEntity;
 
 @Entity
 @Getter
 @NoArgsConstructor
-public class Pet {
+public class Pet extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pet_id")

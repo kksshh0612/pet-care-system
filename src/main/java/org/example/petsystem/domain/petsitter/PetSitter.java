@@ -20,11 +20,12 @@ import org.example.petsystem.domain.certification.Certification;
 import org.example.petsystem.domain.member.Member;
 import org.example.petsystem.domain.pet.PetCode;
 import org.example.petsystem.domain.week.DayOfWeek;
+import org.example.petsystem.global.auditing.BaseEntity;
 
 @Entity
 @Getter
 @NoArgsConstructor
-public class PetSitter {
+public class PetSitter extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pet_sitter_id")

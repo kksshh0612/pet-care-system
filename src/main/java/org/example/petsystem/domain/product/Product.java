@@ -10,11 +10,12 @@ import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.petsystem.global.auditing.BaseEntity;
 
 @Entity
 @Getter
 @NoArgsConstructor
-public class Product {
+public class Product extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")

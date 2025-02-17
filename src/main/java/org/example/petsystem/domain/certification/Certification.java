@@ -17,11 +17,12 @@ import lombok.NoArgsConstructor;
 import org.example.petsystem.domain.file.CertificationFile;
 import org.example.petsystem.domain.member.Member;
 import org.example.petsystem.domain.petsitter.PetSitter;
+import org.example.petsystem.global.auditing.BaseEntity;
 
 @Entity
 @Getter
 @NoArgsConstructor
-public class Certification {
+public class Certification extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "certification_id")
