@@ -15,6 +15,9 @@ public enum ErrorCode {
     // 401
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "인증되지 않은 사용자입니다."),
 
+    // 403
+    FORBIDDEN(HttpStatus.FORBIDDEN, "권한이 없습니다."),
+
     // 404
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "회원을 찾을 수 없습니다."),
     PET_SITTER_NOT_FOUND(HttpStatus.NOT_FOUND, "펫시터를 찾을 수 없습니다."),

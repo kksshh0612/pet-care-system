@@ -17,6 +17,7 @@ import org.example.petsystem.dto.request.member.EmailDuplicationCheckRequest;
 import org.example.petsystem.dto.request.member.LoginRequest;
 import org.example.petsystem.dto.request.member.PasswordChangeRequest;
 import org.example.petsystem.dto.request.member.SignUpRequest;
+import org.example.petsystem.dto.response.member.LoginSuccessDto;
 import org.example.petsystem.dto.response.member.MypageMemberInfoResponse;
 import org.example.petsystem.service.member.MemberService;
 import org.springframework.http.ResponseEntity;
@@ -82,11 +83,12 @@ public class MemberController {
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest,
                                    HttpServletRequest request) {
 
-        Long memberId = memberService.login(loginRequest);
+        LoginSuccessDto loginSuccessDto = memberService.login(loginRequest);
 
         // 세션 세팅
         HttpSession session = request.getSession();
-        session.setAttribute("memberId", memberId);
+        session.setAttribute("memberId", loginSuccessDto.getMemberId());
+        session.setAttribute("memberRole", loginSuccessDto.getMemberRole().toString());
 
         return ResponseEntity.ok().build();
     }

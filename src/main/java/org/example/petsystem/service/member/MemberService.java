@@ -8,6 +8,7 @@ import org.example.petsystem.domain.member.Member;
 import org.example.petsystem.dto.request.member.LoginRequest;
 import org.example.petsystem.dto.request.member.PasswordChangeRequest;
 import org.example.petsystem.dto.request.member.SignUpRequest;
+import org.example.petsystem.dto.response.member.LoginSuccessDto;
 import org.example.petsystem.dto.response.member.MypageMemberInfoResponse;
 import org.example.petsystem.repository.member.MemberRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -52,7 +53,7 @@ public class MemberService {
      * 로그인
      * @param loginRequest
      */
-    public Long login(LoginRequest loginRequest){
+    public LoginSuccessDto login(LoginRequest loginRequest){
 
         Member member = memberRepository.findByEmailAddress(loginRequest.getEmailAddress())
                 .orElseThrow(() -> new CustomException(ErrorCode.EMAIL_PASSWORD_NOT_MATCH));
@@ -61,7 +62,7 @@ public class MemberService {
             throw new CustomException(ErrorCode.EMAIL_PASSWORD_NOT_MATCH);
         }
 
-        return member.getId();
+        return LoginSuccessDto.of(member);
     }
 
     /**
