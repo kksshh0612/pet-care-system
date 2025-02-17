@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/vi/member")
+@RequestMapping("/api/v1/member")
 @Tag(name = "회원 API")
 public class MemberController {
 
@@ -143,10 +143,12 @@ public class MemberController {
             ))
     })
     @GetMapping("")
-    public ResponseEntity<?> findMemberInfo(HttpServletRequest request) {
+    public ResponseEntity<?> findMemberInfo(HttpSession session) {
 
-        HttpSession session = request.getSession();
+//        HttpSession session = request.getSession();
         Long memberId = (Long) session.getAttribute("memberId");
+
+        System.out.println("회원 id : " + memberId);
 
         if(memberId == null) {
             throw new CustomException(ErrorCode.UNAUTHORIZED);
