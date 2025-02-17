@@ -21,6 +21,8 @@ public enum ErrorCode {
     // 404
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "회원을 찾을 수 없습니다."),
     PET_SITTER_NOT_FOUND(HttpStatus.NOT_FOUND, "펫시터를 찾을 수 없습니다."),
+    CODE_GROUP_NOT_FOUND(HttpStatus.NOT_FOUND, "코드 그룹을 찾을 수 없습니다."),
+    CODE_DETAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "코드를 찾을 수 없습니다."),
 
     // 409
     EMAIL_ADDRESS_ALREADY_EXIST(HttpStatus.CONFLICT, "이미 존재하는 이메일입니다."),

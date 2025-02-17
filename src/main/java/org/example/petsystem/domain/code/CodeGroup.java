@@ -19,12 +19,23 @@ public class CodeGroup extends BaseEntity {
     @Column(name = "code_group_id")
     private Long id;
 
+    private String code;
+
     private String groupName;
 
     private String description;
 
     @Builder
-    public CodeGroup(String groupName, String description) {
+    public CodeGroup(String code, String groupName, String description) {
+        this.code = code;
+        this.groupName = groupName;
+        this.description = description;
+    }
+
+    //== 비지니스 로직 ==//
+
+    public void modify(String code, String groupName, String description) {
+        this.code = code;
         this.groupName = groupName;
         this.description = description;
     }

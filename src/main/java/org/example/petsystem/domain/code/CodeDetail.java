@@ -39,4 +39,17 @@ public class CodeDetail extends BaseEntity {
         this.isActive = isActive;
         this.codeGroup = codeGroup;
     }
+
+    //== 비지니스 로직 ==//
+
+    public void modify(String codeName, String codeValue, boolean isActive) {
+        this.codeName = codeName;
+        this.codeValue = codeValue;
+        this.isActive = isActive;
+    }
+
+    public void toggleActiveStatus(){
+        this.isActive = !this.isActive;
+    }
+
 }
