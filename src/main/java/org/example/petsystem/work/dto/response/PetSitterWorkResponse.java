@@ -17,6 +17,7 @@ import org.example.petsystem.work.domain.ServiceType;
 @Builder
 public class PetSitterWorkResponse {
 
+    private Long id;
     private String petSitterName;
     private String introduction;
     private List<ServiceType> serviceTypes;     // 방문돌봄 위탁돌봄 산책
@@ -26,6 +27,7 @@ public class PetSitterWorkResponse {
 
     public static PetSitterWorkResponse of(PetSitter petSitter, PetSitterWork petSitterWork){
         return PetSitterWorkResponse.builder()
+                .id(petSitterWork.getId())
                 .petSitterName(petSitter.getMember().getName())
                 .introduction(petSitter.getIntroduction())
                 .serviceTypes(petSitterWork.getServiceTypes())
