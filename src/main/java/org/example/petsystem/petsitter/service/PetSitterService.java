@@ -138,21 +138,25 @@ public class PetSitterService {
      * @param sortType
      * @return
      */
-    public PetSitterProfileListResponse findPetSitterProfileListForGeneral(int page, int size, SortType sortType){
+    public PetSitterProfileListResponse findPetSitterProfileListForGeneral(){
 
-        PageRequest pageRequest;
+        System.out.println("호출");
 
-        switch (sortType){
-            case RATING_DESC -> pageRequest = PageRequest.of(page, size, Sort.by(Direction.DESC, "averageRating"));
-            case RATING_ASC -> pageRequest = PageRequest.of(page, size, Sort.by(Direction.ASC, "averageRating"));
-            case FEE_DESC -> pageRequest = PageRequest.of(page, size, Sort.by(Direction.DESC, "fee"));
-            case FEE_ASC -> pageRequest = PageRequest.of(page, size, Sort.by(Direction.ASC, "fee"));
-            case TOTAL_SERVICE_COUNT_DESC -> pageRequest = PageRequest.of(page, size, Sort.by(Direction.DESC, "totalServiceCount"));
-            case TOTAL_SERVICE_COUNT_ASC -> pageRequest = PageRequest.of(page, size, Sort.by(Direction.ASC, "totalServiceCount"));
-            default -> pageRequest = PageRequest.of(page, size, Sort.by(Direction.DESC, "id"));
-        }
+        PageRequest pageRequest = PageRequest.of(0, 10);
+
+//        switch (sortType){
+//            case RATING_DESC -> pageRequest = PageRequest.of(page, size, Sort.by(Direction.DESC, "averageRating"));
+//            case RATING_ASC -> pageRequest = PageRequest.of(page, size, Sort.by(Direction.ASC, "averageRating"));
+//            case FEE_DESC -> pageRequest = PageRequest.of(page, size, Sort.by(Direction.DESC, "fee"));
+//            case FEE_ASC -> pageRequest = PageRequest.of(page, size, Sort.by(Direction.ASC, "fee"));
+//            case TOTAL_SERVICE_COUNT_DESC -> pageRequest = PageRequest.of(page, size, Sort.by(Direction.DESC, "totalServiceCount"));
+//            case TOTAL_SERVICE_COUNT_ASC -> pageRequest = PageRequest.of(page, size, Sort.by(Direction.ASC, "totalServiceCount"));
+//            default -> pageRequest = PageRequest.of(page, size, Sort.by(Direction.DESC, "id"));
+//        }
 
         List<PetSitter> petSitters = petSitterRepository.findAllApprovedPetSitters(pageRequest).getContent();
+
+        System.out.println(petSitters.size());
 
         return PetSitterProfileListResponse.of(
                 petSitters.stream()

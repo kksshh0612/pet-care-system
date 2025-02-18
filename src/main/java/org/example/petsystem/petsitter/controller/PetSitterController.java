@@ -128,11 +128,9 @@ public class PetSitterController {
 
     })
     @GetMapping("/list")
-    public ResponseEntity<?> findPetSitterProfileListForGeneral(@RequestParam("page") int page,
-                                                      @RequestParam("size") int size,
-                                                      @RequestParam("sort-type") SortType sortType){
+    public ResponseEntity<?> findPetSitterProfileListForGeneral(){
 
-        return ResponseEntity.ok(petSitterService.findPetSitterProfileListForGeneral(page, size, sortType));
+        return ResponseEntity.ok(petSitterService.findPetSitterProfileListForGeneral());
     }
 
     @Operation(summary = "관리자의 펫시터 프로필 목록 조회", description = "관리자가 펫시터 프로필 목록을 조회한다.")
