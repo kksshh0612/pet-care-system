@@ -144,6 +144,13 @@ public class PetSitterController {
         return ResponseEntity.ok(petSitterService.findPetSitterProfileListForManager(page, size));
     }
 
+    @Operation(summary = "펫시터 프로필 승인", description = "관리자가 펫시터 프로필 등록을 승인한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(responseCode = "403", content = @Content(mediaType = "application/json",
+                    examples = {@ExampleObject(name = "권한이 없는 사용자가 접근할 경우")}
+            ))
+    })
     @PatchMapping("/{pet-sitter-id}/approve")
     public ResponseEntity<?> approvePetSitter(@PathVariable("pet-sitter-id") Long petSitterId){
 
